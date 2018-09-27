@@ -5,10 +5,11 @@ import {
   TextInput,
   KeyboardAvoidingView,
   StyleSheet,
-  Platform
+  Platform,
+  TouchableOpacity,
+  AsyncStorage
 } from 'react-native'
-import { parameterizeString } from '../utils/helpers'
-import TextButton from './TextButton'
+import { parameterizeString, FLASHCARDS_STORAGE_KEY } from '../utils/helpers'
 import { submitDeck } from '../utils/api'
 import { connect } from 'react-redux'
 import { addDeck } from '../actions'
@@ -19,9 +20,14 @@ class AddDeck extends Component {
     title: ''
   }
   submit = () => {
-    const key = parameterizeString(this.state.title)
-    const { deck } = this.state
+    const { title } = this.state
+    const key = parameterizeString(title)
+    const deck = {
+      title: title,
+      questions: []
+    }
 
+    console.log('Deck: ', deck)
     this.props.dispatch(addDeck({
       [key]: deck
     }))
@@ -42,14 +48,15 @@ class AddDeck extends Component {
           value={title}
           behavior='padding'
           placeholder='New deck title'
-          onChangeText={(title) => this.setState({title})}
+          onChangeText={(title) => this.setState({title: title})}
         />
-        <TextButton
-          style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.androidSubmitBtn}
+        <TouchableOpacity
+          style={styles.iosSubmitBtn}
           onPress={this.submit}
         >
           <Text style={styles.submitBtnText}>SUBMIT</Text>
-        </TextButton>
+        </TouchableOpacity>
+        <Text>{JSON.stringify(AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY))}</Text>
       </KeyboardAvoidingView>
     )
   }
