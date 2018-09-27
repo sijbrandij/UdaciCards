@@ -4,13 +4,17 @@ import {
   View,
   TextInput,
   KeyboardAvoidingView,
-  StyleSheet
+  StyleSheet,
+  Platform
 } from 'react-native'
 import { parameterizeString } from '../utils/helpers'
 import TextButton from './TextButton'
-import { addDeck } from '../utils/api'
+import { submitDeck } from '../utils/api'
+import { connect } from 'react-redux'
+import { addDeck } from '../actions'
+import { white, purple } from '../utils/colors'
 
-export default class AddDeck extends Component {
+class AddDeck extends Component {
   state = {
     title: ''
   }
@@ -18,7 +22,9 @@ export default class AddDeck extends Component {
     const key = parameterizeString(this.state.title)
     const { deck } = this.state
 
-    // Update Redux
+    this.props.dispatch(addDeck({
+      [key]: deck
+    }))
 
     this.setState({ title: '' })
 
@@ -29,11 +35,8 @@ export default class AddDeck extends Component {
   render() {
     const { title } = this.state
     return (
-      <KeyboardAvoidingView>
-
-        <Text>Text</Text>
-        <Text>More text</Text>
-        <Text>Add Deck</Text>
+      <KeyboardAvoidingView style={styles.container}>
+        <Text style={styles.title}>Add Deck</Text>
         <TextInput
           style={styles.input}
           value={title}
@@ -41,8 +44,11 @@ export default class AddDeck extends Component {
           placeholder='New deck title'
           onChangeText={(title) => this.setState({title})}
         />
-        <TextButton onPress={this.submit}>
-          <Text>SUBMIT</Text>
+        <TextButton
+          style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.androidSubmitBtn}
+          onPress={this.submit}
+        >
+          <Text style={styles.submitBtnText}>SUBMIT</Text>
         </TextButton>
       </KeyboardAvoidingView>
     )
@@ -50,6 +56,15 @@ export default class AddDeck extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: white,
+  },
+  title: {
+    fontSize: 22,
+    textAlign: 'center',
+  },
   input: {
     width: 200,
     height: 44,
@@ -58,5 +73,29 @@ const styles = StyleSheet.create({
     borderColor: '#757575',
     borderRadius: 5,
     margin: 50,
+  },
+  iosSubmitBtn: {
+    backgroundColor: purple,
+    padding: 10,
+    borderRadius: 7,
+    height: 45,
+    marginLeft: 40,
+    marginRight: 40,
+  },
+  androidSubmitBtn: {
+    backgroundColor: purple,
+    padding: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
+    height: 45,
+    borderRadius: 2,
+    alignItems: 'center'
+  },
+  submitBtnText: {
+    color: white,
+    fontSize: 22,
+    textAlign: 'center'
   }
 })
+
+export default connect()(AddDeck)
