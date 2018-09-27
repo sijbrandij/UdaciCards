@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-import { Text, View, TextInput, TouchableOpacity } from 'react-native'
+import {
+  Text,
+  View,
+  TextInput,
+  KeyboardAvoidingView,
+  StyleSheet
+} from 'react-native'
 import { parameterizeString } from '../utils/helpers'
-
-function SubmitBtn ({ onPress }) {
-  return (
-    <TouchableOpacity
-      onPress={onPress}>
-      <Text>SUBMIT</Text>
-    </TouchableOpacity>
-  )
-}
+import TextButton from './TextButton'
+import { addDeck } from '../utils/api'
 
 export default class AddDeck extends Component {
   state = {
@@ -25,24 +24,39 @@ export default class AddDeck extends Component {
 
     // route to home
 
-    // save to 'db'
+    submitDeck({ key, deck })
   }
   render() {
     const { title } = this.state
     return (
-      <View>
+      <KeyboardAvoidingView>
 
         <Text>Text</Text>
         <Text>More text</Text>
         <Text>Add Deck</Text>
         <TextInput
+          style={styles.input}
           value={title}
+          behavior='padding'
           placeholder='New deck title'
           onChangeText={(title) => this.setState({title})}
         />
-        <SubmitBtn onPress={this.submit} />
-        <Text>{JSON.stringify(this.state)}</Text>
-      </View>
+        <TextButton onPress={this.submit}>
+          <Text>SUBMIT</Text>
+        </TextButton>
+      </KeyboardAvoidingView>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  input: {
+    width: 200,
+    height: 44,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: '#757575',
+    borderRadius: 5,
+    margin: 50,
+  }
+})
