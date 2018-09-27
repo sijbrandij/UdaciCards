@@ -1,13 +1,18 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import AddDeck from './components/AddDeck'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import reducer from './reducers'
 
 export default class App extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
-        <AddDeck />
-      </View>
+      <Provider store={createStore(reducer)}>
+        <View style={styles.container}>
+          <AddDeck />
+        </View>
+      </Provider>
     );
   }
 }
