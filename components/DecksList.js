@@ -5,10 +5,13 @@ import {
   StyleSheet,
   Platform,
   TouchableOpacity,
+  FlatList,
+  AsyncStorage,
 } from 'react-native'
 import { connect } from 'react-redux'
 import { receiveDecks } from '../actions'
 import { fetchDecks } from '../utils/api'
+import { white, purple } from '../utils/colors'
 
 class DecksList extends Component {
   componentDidMount () {
@@ -17,21 +20,71 @@ class DecksList extends Component {
     fetchDecks()
       .then(({ decks }) => dispatch(receiveDecks(decks)))
   }
-  renderItem = ({ title }, key) => (
-    <View key={key}>
-      <Text>{title}</Text>
+  renderItem = ({ item }, key) => (
+    <View key={key} style={styles.item}>
+      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.subTitle}>{item.questions.length} cards</Text>
     </View>
   )
   render() {
+    const { decks } = this.props
+    let decksList = Object.keys(decks).map((key) => decks[key])
     return (
-      <Text>{JSON.stringify(this.props)}</Text>
+      <View style={styles.container}>
+        <Text style={styles.header}>What will you learn today?</Text>
+        <FlatList
+          data={decksList}
+          renderItem={this.renderItem}
+        />
+      </View>
     )
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  header: {
+    fontSize: 36,
+    textAlign: 'center',
+  },
+  item: {
+    flex: 1,
+    backgroundColor: white,
+    borderRadius: Platform.OS === 'ios' ? 16 : 2,
+    padding: 20,
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 17,
+    justifyContent: 'center',
+    shadowRadius: 3,
+    shadowOpacity: 0.8,
+    shadowColor: 'rgba(0, 0, 0, 0.24)',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    width: 300,
+    height: 100,
+  },
+  title: {
+    flex: 1,
+    fontSize: 22,
+    textAlign: 'center',
+  },
+  subTitle: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 18,
+  },
+})
+
 function mapStateToProps (state) {
   return {
-    state
+    decks: state
   }
 }
 

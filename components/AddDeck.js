@@ -27,7 +27,6 @@ class AddDeck extends Component {
       questions: []
     }
 
-    console.log('Deck: ', deck)
     this.props.dispatch(addDeck({
       [key]: deck
     }))
@@ -56,7 +55,6 @@ class AddDeck extends Component {
         >
           <Text style={styles.submitBtnText}>SUBMIT</Text>
         </TouchableOpacity>
-        <Text>{JSON.stringify(AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY))}</Text>
       </KeyboardAvoidingView>
     )
   }
