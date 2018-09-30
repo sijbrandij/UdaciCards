@@ -1,4 +1,5 @@
 import React from 'react'
+import AsyncStorage from 'react-native'
 
 export const FLASHCARDS_STORAGE_KEY = 'UdaciCards:flashcards'
 
@@ -32,9 +33,9 @@ function setDummyData() {
     }
   }
 
-  AsyncStorage.setItem(FLASHCARDS_STORAGE_KEY, JSON.stringify(dummyData))
+  AsyncStorage.setItem(FLASHCARDS_STORAGE_KEY, JSON.stringify(decks))
 
-  return dummyData
+  return decks
 }
 
 export function formatDeckResults (results) {
