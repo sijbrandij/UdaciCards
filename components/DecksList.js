@@ -20,21 +20,25 @@ class DecksList extends Component {
     fetchDecks()
       .then(({ decks }) => dispatch(receiveDecks(decks)))
   }
-  renderItem = ({ item }, key) => (
-    <View key={key} style={styles.item}>
+  renderItem = ({ item }) => (
+    <View style={styles.item}>
       <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.subTitle}>{item.questions.length} cards</Text>
     </View>
   )
   render() {
     const { decks } = this.props
-    let decksList = Object.keys(decks).map((key) => decks[key])
+    let decksList = []
+    Object.keys(decks).map((key) => {
+      decksList.push(decks[key])
+    })
     return (
       <View style={styles.container}>
         <Text style={styles.header}>What will you learn today?</Text>
         <FlatList
           data={decksList}
           renderItem={this.renderItem}
+          keyExtractor={(item, index) => index.toString()}
         />
       </View>
     )

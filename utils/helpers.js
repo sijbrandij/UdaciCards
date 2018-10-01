@@ -41,5 +41,5 @@ function setDummyData() {
 export function formatDeckResults (results) {
   return results === null
     ? setDummyData()
-    : { decks: JSON.parse(results) }
+    : JSON.parse(results)
 }
