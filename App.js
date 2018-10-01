@@ -9,7 +9,7 @@ import { blue, white } from './utils/colors'
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 import AddDeck from './components/AddDeck'
 import DecksList from './components/DecksList'
-
+import DeckDetail from './components/DeckDetail'
 
 function UdaciStatusBar ({ backgroundColor, ...props }) {
   return (
@@ -60,6 +60,15 @@ const MainNavigator = createStackNavigator({
     navigationOptions: {
       header: null,
     },
+  },
+  DeckDetail: {
+    screen: DeckDetail,
+    navigationOptions: ({ navigation }) => ({
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: blue,
+      },
+    }),
   },
 })
 

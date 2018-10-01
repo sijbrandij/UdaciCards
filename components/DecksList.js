@@ -21,10 +21,15 @@ class DecksList extends Component {
       .then(({ decks }) => dispatch(receiveDecks(decks)))
   }
   renderItem = ({ item }) => (
-    <View style={styles.item}>
+    <TouchableOpacity
+      onPress={() => this.props.navigation.navigate(
+        DeckDetail,
+        { deckId: key}
+      )}
+      style={styles.item}>
       <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.subTitle}>{item.questions.length} cards</Text>
-    </View>
+    </TouchableOpacity>
   )
   render() {
     const { decks } = this.props
