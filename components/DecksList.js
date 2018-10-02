@@ -18,12 +18,12 @@ class DecksList extends Component {
     const { dispatch } = this.props
 
     fetchDecks()
-      .then(({ decks }) => dispatch(receiveDecks(decks)))
+      .then(decks => dispatch(receiveDecks(decks)))
   }
   renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => this.props.navigation.navigate(
-        DeckDetail,
+        'DeckDetail',
         { deckId: key}
       )}
       style={styles.item}>
@@ -33,18 +33,10 @@ class DecksList extends Component {
   )
   render() {
     const { decks } = this.props
-    let decksList = []
-    Object.keys(decks).map((key) => {
-      decksList.push(decks[key])
-    })
     return (
       <View style={styles.container}>
         <Text style={styles.header}>What will you learn today?</Text>
-        <FlatList
-          data={decksList}
-          renderItem={this.renderItem}
-          keyExtractor={(item, index) => index.toString()}
-        />
+
       </View>
     )
   }
@@ -91,9 +83,9 @@ const styles = StyleSheet.create({
   },
 })
 
-function mapStateToProps (state) {
+function mapStateToProps ({decks}) {
   return {
-    decks: state
+    decks
   }
 }
 
