@@ -38,6 +38,14 @@ function setDummyData() {
   return decks
 }
 
+function formatResults (results) {
+  let decks = {}
+  Object.keys(results).map((key) => {
+    decks[key] = results[key]
+  })
+  return {decks: decks}
+}
+
 export function formatDeckResults (results) {
   return results === null
     ? setDummyData()
