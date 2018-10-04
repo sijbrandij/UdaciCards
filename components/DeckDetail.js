@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Text, View, StyleSheet, TouchableOpacity, Platform } from 'react-native'
-import { white, pink } from '../utils/colors'
+import { white, purple } from '../utils/colors'
 
 class DeckDetail extends Component {
 	static navigationOptions = ({ navigation }) => {
-		const { deckId } = navigation.state.params
+		const { title } = navigation.state.params
 		return {
-			title: deckId
+			title: title
 		}
 	}
 	render() {
-		const { deck } = this.props
+		const { deck, navigation } = this.props
+		const numberOfQuestions = deck.questions.length
 		return (
 		  <View style={styles.container}>
 		  	<View style={styles.titleContainer}>
@@ -20,15 +21,18 @@ class DeckDetail extends Component {
 			  </View>
 		    <TouchableOpacity
 		    	onPress={() => console.log('Pressed quiz')}
-		    	style={styles.quizBtn}
+		    	style={numberOfQuestions > 0 ? styles.ctaBtn : styles.secondaryBtn}
 		    >
-		    	<Text style={styles.quizBtnText}>Start Quiz</Text>
+		    	<Text style={numberOfQuestions > 0 ? styles.ctaBtnText : styles.secondaryBtnText}>Start Quiz</Text>
 	    	</TouchableOpacity>
 	    	<TouchableOpacity
-	    		onPress={() => console.log('Pressed add new question')}
-	    		style={styles.newQuestionBtn}
+	    		onPress={() => this.props.navigation.navigate(
+          'AddQuestion',
+          { deckId: navigation.state.params.deckId, title: deck.title }
+        )}
+	    		style={numberOfQuestions > 0 ? styles.secondaryBtn : styles.ctaBtn}
 	    	>
-	    		<Text style={styles.newQuestionBtnText}>Add another question</Text>
+	    		<Text style={numberOfQuestions > 0 ? styles.secondaryBtnText : styles.ctaBtnText}>Add another question</Text>
 	    	</TouchableOpacity>
 		  </View>
 		)
@@ -54,7 +58,7 @@ const styles = StyleSheet.create({
 	subTitle: {
 		fontSize: 22,
 	},
-	quizBtn: {
+	ctaBtn: {
 		flex: 1,
 		width: '100%',
 		height: 30,
@@ -62,11 +66,11 @@ const styles = StyleSheet.create({
 		paddingBottom: 20,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: pink,
+		backgroundColor: purple,
 		borderRadius: Platform.OS === 'ios' ? 16 : 2,
 		marginBottom: 20,
 	},
-	newQuestionBtn: {
+	secondaryBtn: {
 		flex: 1,
 		width: '100%',
 		paddingTop: 20,
@@ -76,16 +80,16 @@ const styles = StyleSheet.create({
 		backgroundColor: white,
 		borderRadius: Platform.OS === 'ios' ? 16 : 2,
 		borderWidth: 1,
-		borderColor: pink,
+		borderColor: purple,
 		marginBottom: 20,
 	},
-	quizBtnText: {
+	ctaBtnText: {
 		fontSize: 24,
 		color: white,
 	},
-	newQuestionBtnText: {
+	secondaryBtnText: {
 		fontSize: 24,
-		color: pink,
+		color: purple,
 	}
 })
 

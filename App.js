@@ -10,6 +10,7 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 import AddDeck from './components/AddDeck'
 import DecksList from './components/DecksList'
 import DeckDetail from './components/DeckDetail'
+import AddQuestion from './components/AddQuestion'
 
 function UdaciStatusBar ({ backgroundColor, ...props }) {
   return (
@@ -70,6 +71,15 @@ const MainNavigator = createStackNavigator({
       },
     }),
   },
+  AddQuestion: {
+    screen: AddQuestion,
+    navigationOptions: ({ navigation }) => ({
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: blue,
+      }
+    })
+  }
 })
 
 export default class App extends React.Component {
