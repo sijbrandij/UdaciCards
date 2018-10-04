@@ -9,7 +9,7 @@ import {
   AsyncStorage
 } from 'react-native'
 import { NavigationActions } from 'react-navigation'
-import { submitDeck } from '../utils/api'
+import { addQuestion } from '../utils/api'
 import { connect } from 'react-redux'
 import { addDeck } from '../actions'
 import { white, purple } from '../utils/colors'
@@ -19,23 +19,25 @@ class AddQuestion extends Component {
 		question: '',
 		answer: ''
 	}
-	toHome = () => {
+	toDeckDetail = () => {
     this.props.navigation.dispatch(NavigationActions.back({key: 'AddQuestion'}))
   }
   submit = () => {
     const { question, answer } = this.state
     const key = this.props.navigation.state.deckId
     const newQuestion = { question: question, answer: answer }
+    let deck = this.props.deck
+    deck.questions.push(newQuestion)
 
-    this.props.dispatch(addDeck({
-      [key]: deck
+    this.props.dispatch(addQuestion({
+      key, newQuestion
     }))
 
     this.setState({ title: '' })
 
-    this.toHome()
+    // navigate to DeckDetail
 
-    submitDeck({ key, deck })
+    addQuestion({ key, newQuestion })
   }
 	render() {
 		const { question, answer } = this.state
