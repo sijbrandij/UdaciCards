@@ -14,10 +14,14 @@ import { submitDeck } from '../utils/api'
 import { connect } from 'react-redux'
 import { addDeck } from '../actions'
 import { white, purple } from '../utils/colors'
+import { NavigationActions } from 'react-navigation'
 
 class AddDeck extends Component {
   state = {
     title: ''
+  }
+  toHome = () => {
+    this.props.navigation.dispatch(NavigationActions.back({key: 'AddDeck'}))
   }
   submit = () => {
     const { title } = this.state
@@ -33,7 +37,7 @@ class AddDeck extends Component {
 
     this.setState({ title: '' })
 
-    // route to home
+    this.toHome()
 
     submitDeck({ key, deck })
   }
