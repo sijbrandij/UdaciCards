@@ -21,6 +21,7 @@ class DeckDetail extends Component {
 			  </View>
 		    <TouchableOpacity
 		    	onPress={() => console.log('Pressed quiz')}
+		    	disabled={numberOfQuestions === 0}
 		    	style={numberOfQuestions > 0 ? styles.ctaBtn : styles.secondaryBtn}
 		    >
 		    	<Text style={numberOfQuestions > 0 ? styles.ctaBtnText : styles.secondaryBtnText}>Start Quiz</Text>

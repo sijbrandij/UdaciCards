@@ -13,12 +13,12 @@ export function submitDeck ({ deck, key }) {
 }
 
 export function addQuestion ({ newQuestion, deckId }) {
-	console.log(deckId)
-	console.log(newQuestion)
-	return AsyncStorage.getItem(deckId)
-		.then((data) => {
-			data = JSON.parse(data)
-			data.questions.push(newQuestion)
-			AsyncStorage.setItem(deckId, JSON.stringify(data))
-		})
+  return AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY)
+    .then(data => {
+      let decks = JSON.parse(data)
+      let deck = decks[deckId]
+      deck.questions.push(newQuestion)
+      decks[deckId] = deck
+      AsyncStorage.setItem(FLASHCARDS_STORAGE_KEY, JSON.stringify(decks))
+    })
 }

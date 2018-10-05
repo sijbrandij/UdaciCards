@@ -20,8 +20,11 @@ class AddDeck extends Component {
   state = {
     title: ''
   }
-  toHome = () => {
-    this.props.navigation.dispatch(NavigationActions.back({key: 'AddDeck'}))
+  toDeck = (key, title) => {
+    this.props.navigation.navigate(
+      'DeckDetail',
+      { deckId: key, title: title }
+    )
   }
   submit = () => {
     const { title } = this.state
@@ -37,7 +40,7 @@ class AddDeck extends Component {
 
     this.setState({ title: '' })
 
-    this.toHome()
+    this.toDeck(key, deck.title)
 
     submitDeck({ key, deck })
   }

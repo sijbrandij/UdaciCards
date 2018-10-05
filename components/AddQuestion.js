@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { 
-	Text, 
-	View, 
-	TouchableOpacity, 
-	StyleSheet, 
+import {
+	Text,
+	View,
+	TouchableOpacity,
+	StyleSheet,
 	TextInput,
   KeyboardAvoidingView,
   AsyncStorage
@@ -11,7 +11,7 @@ import {
 import { NavigationActions } from 'react-navigation'
 import { addQuestion } from '../utils/api'
 import { connect } from 'react-redux'
-import { addDeck } from '../actions'
+import { addQuestion as addQuestionAction } from '../actions'
 import { white, purple } from '../utils/colors'
 
 class AddQuestion extends Component {
@@ -19,24 +19,27 @@ class AddQuestion extends Component {
 		question: '',
 		answer: ''
 	}
-	toDeckDetail = () => {
-    this.props.navigation.dispatch(NavigationActions.back({key: 'AddQuestion'}))
+
+  toDeck = (deckId, title) => {
+      this.props.navigation.navigate(
+        'DeckDetail',
+        { deckId: deckId, title: title }
+      )
   }
+
   submit = () => {
     const { question, answer } = this.state
     const { navigation, deckId, deck, dispatch } = this.props
     let newQuestion = { question: question, answer: answer }
 
-    dispatch(addQuestion({
-      deckId, newQuestion
-    }))
+    dispatch(addQuestionAction(deckId, newQuestion))
 
-    this.setState({ 
-    	question: '', 
-    	answer: '' 
+    this.setState({
+    	question: '',
+    	answer: ''
     })
 
-    // navigate to DeckDetail
+    this.toDeck(deckId, deck.title)
 
     addQuestion({ deckId, newQuestion })
   }
