@@ -24,20 +24,21 @@ class AddQuestion extends Component {
   }
   submit = () => {
     const { question, answer } = this.state
-    const key = this.props.navigation.state.deckId
-    const newQuestion = { question: question, answer: answer }
-    let deck = this.props.deck
-    deck.questions.push(newQuestion)
+    const { navigation, deckId, deck, dispatch } = this.props
+    let newQuestion = { question: question, answer: answer }
 
-    this.props.dispatch(addQuestion({
-      key, newQuestion
+    dispatch(addQuestion({
+      deckId, newQuestion
     }))
 
-    this.setState({ title: '' })
+    this.setState({ 
+    	question: '', 
+    	answer: '' 
+    })
 
     // navigate to DeckDetail
 
-    addQuestion({ key, newQuestion })
+    addQuestion({ deckId, newQuestion })
   }
 	render() {
 		const { question, answer } = this.state
