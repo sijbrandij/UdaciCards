@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Text, View, StyleSheet, TouchableOpacity, Platform } from 'react-native'
-import { white, purple } from '../utils/colors'
+import { white, purple, gray } from '../utils/colors'
 
 class DeckDetail extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -22,9 +22,9 @@ class DeckDetail extends Component {
 		    <TouchableOpacity
 		    	onPress={() => console.log('Pressed quiz')}
 		    	disabled={numberOfQuestions === 0}
-		    	style={numberOfQuestions > 0 ? styles.ctaBtn : styles.secondaryBtn}
+		    	style={numberOfQuestions > 0 ? styles.ctaBtn : styles.disabledBtn}
 		    >
-		    	<Text style={numberOfQuestions > 0 ? styles.ctaBtnText : styles.secondaryBtnText}>Start Quiz</Text>
+		    	<Text style={numberOfQuestions > 0 ? styles.ctaBtnText : styles.disabledBtnText}>Start Quiz</Text>
 	    	</TouchableOpacity>
 	    	<TouchableOpacity
 	    		onPress={() => this.props.navigation.navigate(
@@ -91,7 +91,24 @@ const styles = StyleSheet.create({
 	secondaryBtnText: {
 		fontSize: 24,
 		color: purple,
-	}
+	},
+	disabledBtn: {
+		flex: 1,
+		width: '100%',
+		paddingTop: 20,
+		paddingBottom: 20,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: white,
+		borderRadius: Platform.OS === 'ios' ? 16 : 2,
+		borderWidth: 1,
+		borderColor: gray,
+		marginBottom: 20,
+	},
+	disabledBtnText: {
+		fontSize: 24,
+		color: gray,
+	},
 })
 
 function mapStateToProps (state, { navigation }) {
