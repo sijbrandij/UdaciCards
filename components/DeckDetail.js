@@ -20,7 +20,10 @@ class DeckDetail extends Component {
 			    <Text style={styles.subTitle}>{deck.questions.length} cards</Text>
 			  </View>
 		    <TouchableOpacity
-		    	onPress={() => console.log('Pressed quiz')}
+		    	onPress={() => this.props.navigation.navigate(
+		    		'Quiz',
+		    		{ deckId: navigation.state.params.deckId, title: deck.title }
+		    	)}
 		    	disabled={numberOfQuestions === 0}
 		    	style={numberOfQuestions > 0 ? styles.ctaBtn : styles.disabledBtn}
 		    >
