@@ -1,27 +1,55 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity, Platform, StyleSheet } from 'react-native'
+import { connect } from 'react-redux'
 import { createStackNavigator } from 'react-navigation'
 import { FontAwesome } from '@expo/vector-icons' // meh, smiley, frown-open
 import { red, orange, green, white, purple } from '../utils/colors'
-import { NavigationActions } from 'react-navigation'
 
 class Quiz extends Component {
   state = { 
     finished: false,
     questionsAnswered: 0,
     questionsCorrect: 0,
+    questionsToAnswer: [],
+    showAnswer: false,
+    currentQuestion: {},
   }
 
   reset = () => {
+    let newQuestion = this.props.deck.questions[Math.floor(Math.random() * this.props.deck.questions.length)]
     this.setState({
       finished: false,
       questionsAnswered: 0,
       questionsCorrect: 0,
+      questionsToAnswer: this.props.deck.questions,
+      showAnswer: false,
+      currentQuestion: newQuestion
     })
   }
 
   toDeck = () => {
     this.props.navigation.goBack()
+  }
+
+  saveCorrectAnswer = () => {
+    let newQuestion = this.state.questionsToAnswer[Math.floor(Math.random() * this.state.questionsToAnswer.length)]
+    this.setState(prevState => ({
+      questionsAnswered: prevState.questionsAnswered + 1,
+      questionsCorrect: prevState.questionsCorrect + 1,
+      questionsToAnswer: prevState.questionsToAnswer.filter(element => element !== prevState.currentQuestion),
+      showAnswer: false,
+      currentQuestion: newQuestion,
+    }))
+  }
+
+  saveIncorrectAnswer = () => {
+    let newQuestion = this.state.questionsToAnswer[Math.floor(Math.random() * this.state.questionsToAnswer.length)]
+    this.setState(prevState => ({
+      questionsAnswered: prevState.questionsAnswered + 1,
+      questionsToAnswer: prevState.questionsToAnswer.filter(element => element !== prevState.currentQuestion),
+      showAnswer: false,
+      currentQuestion: newQuestion
+    }))
   }
 
   renderIcon = () => {
@@ -67,16 +95,92 @@ class Quiz extends Component {
     )
   }
 
-  render() {
-    const { finished, questionsAnswered, questionsCorrect } = this.state
+  renderProgress = () => {
+    const { deck } = this.props
+    const { questionsAnswered } = this.state
 
-    if (finished === false) {
-      return this.renderScore()
+    return (
+      <View style={styles.progressContainer}>
+        <Text style={styles.progressContainerText}>{questionsAnswered} / {deck.questions.length}</Text>
+      </View>
+    )
+  }
+
+  renderQuestion () {
+    const { showAnswer, currentQuestion } = this.state
+
+    if (showAnswer === true) {
+      return (
+        <View style={styles.titleContainer}>
+          <Text>{currentQuestion.answer}</Text>
+        </View>
+      )
     }
 
     return (
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>{currentQuestion.question}</Text>
+      </View>
+    )
+  }
+
+  renderButtons = () => {
+    const { showAnswer, currentQuestion } = this.state
+
+    if (showAnswer === true) {
+      return (
+        <View style={{flex: 1}}>
+          <TouchableOpacity
+            style={styles.secondaryBtn}
+            onPress={this.saveCorrectAnswer}>
+            <Text style={styles.secondaryBtnText}>Correct</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.secondaryBtn}
+            onPress={this.saveIncorrectAnswer}>
+            <Text style={styles.secondaryBtnText}>Incorrect</Text>
+          </TouchableOpacity>
+        </View>
+      )
+    }
+
+    return (
+      <View style={{flex: 1}}>
+        <TouchableOpacity
+        style={styles.ctaBtn}
+          onPress={() => this.setState(prevState => ({showAnswer: !prevState.showAnswer}))}>
+          <Text style={styles.ctaBtnText}>Show Answer</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  componentDidMount() {
+    let question = this.props.deck.questions[Math.floor(Math.random() * this.props.deck.questions.length)]
+    this.setState({
+      currentQuestion: question,
+      questionsToAnswer: this.props.deck.questions
+    })
+  }
+
+  render() { 
+    const { finished, questionsAnswered, questionsCorrect, questionsToAnswer, currentQuestion } = this.state
+    
+    if (currentQuestion === {}) {
+      return null
+    }
+
+    if (questionsToAnswer === []) {
+      return this.renderScore()
+    }
+
+    
+
+    return (
       <View style={styles.container}>
-        <Text>Quiz</Text>
+        {this.renderProgress()}
+        {this.renderQuestion()}
+        {this.renderButtons()}
       </View>
     )
   }
@@ -135,4 +239,12 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Quiz
+function mapStateToProps (state, { navigation }) {
+  const { deckId } = navigation.state.params
+
+  return {
+    deck: state[deckId],
+  }
+}
+
+export default connect(mapStateToProps)(Quiz)
