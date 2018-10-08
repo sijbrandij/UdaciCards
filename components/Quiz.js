@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Text, View, TouchableOpacity, Platform, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { createStackNavigator } from 'react-navigation'
-import { FontAwesome } from '@expo/vector-icons' // meh, smiley, frown-open
+import { FontAwesome } from '@expo/vector-icons'
 import { red, orange, green, white, purple } from '../utils/colors'
 
 class Quiz extends Component {
@@ -140,7 +140,7 @@ class Quiz extends Component {
 
     if (showAnswer === true) {
       return (
-        <View style={{flex: 1}}>
+        <Fragment>
           <TouchableOpacity
             style={styles.secondaryBtn}
             onPress={this.saveCorrectAnswer}>
@@ -151,18 +151,16 @@ class Quiz extends Component {
             onPress={this.saveIncorrectAnswer}>
             <Text style={styles.secondaryBtnText}>Incorrect</Text>
           </TouchableOpacity>
-        </View>
+        </Fragment>
       )
     }
 
     return (
-      <View style={{flex: 1}}>
-        <TouchableOpacity
+      <TouchableOpacity
         style={styles.ctaBtn}
-          onPress={() => this.setState(prevState => ({showAnswer: !prevState.showAnswer}))}>
-          <Text style={styles.ctaBtnText}>Show Answer</Text>
-        </TouchableOpacity>
-      </View>
+        onPress={() => this.setState(prevState => ({showAnswer: !prevState.showAnswer}))}>
+        <Text style={styles.ctaBtnText}>Show Answer</Text>
+      </TouchableOpacity>
     )
   }
 
