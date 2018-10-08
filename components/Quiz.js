@@ -6,7 +6,7 @@ import { FontAwesome } from '@expo/vector-icons' // meh, smiley, frown-open
 import { red, orange, green, white, purple } from '../utils/colors'
 
 class Quiz extends Component {
-  state = { 
+  state = {
     finished: false,
     questionsAnswered: 0,
     questionsCorrect: 0,
@@ -31,30 +31,33 @@ class Quiz extends Component {
     this.props.navigation.goBack()
   }
 
+  nextQuestion = () => {
+    const { questionsToAnswer, currentQuestion } = this.state
+    const questionPool = questionsToAnswer.filter(question => (question !== currentQuestion))
+    return questionPool[Math.floor(Math.random() * questionPool.length)]
+  }
+
   saveCorrectAnswer = () => {
-    let newQuestion = this.state.questionsToAnswer[Math.floor(Math.random() * this.state.questionsToAnswer.length)]
     this.setState(prevState => ({
       questionsAnswered: prevState.questionsAnswered + 1,
       questionsCorrect: prevState.questionsCorrect + 1,
       questionsToAnswer: prevState.questionsToAnswer.filter(element => element !== prevState.currentQuestion),
       showAnswer: false,
-      currentQuestion: newQuestion,
+      currentQuestion: this.nextQuestion(),
     }))
   }
 
   saveIncorrectAnswer = () => {
-    let newQuestion = this.state.questionsToAnswer[Math.floor(Math.random() * this.state.questionsToAnswer.length)]
     this.setState(prevState => ({
       questionsAnswered: prevState.questionsAnswered + 1,
       questionsToAnswer: prevState.questionsToAnswer.filter(element => element !== prevState.currentQuestion),
       showAnswer: false,
-      currentQuestion: newQuestion
+      currentQuestion: this.nextQuestion()
     }))
   }
 
   renderIcon = () => {
-    const percentage = 80
-    // calculate percentage
+    const percentage = this.calculateScore()
     if (percentage >= 75) {
       return (
         <FontAwesome name='smile-o' size={100} color={green} />
@@ -65,15 +68,23 @@ class Quiz extends Component {
       )
     } else {
       return (
-        <FontAwesome name='frown-o' size={100} color={orange} />
+        <FontAwesome name='frown-o' size={100} color={red} />
       )
     }
   }
 
+  calculateScore = () => {
+    const { questionsAnswered, questionsCorrect } = this.state
+    if (questionsAnswered === 0 || questionsCorrect === 0) {
+      return 0
+    }
+    result = ((questionsCorrect / questionsAnswered) * 100).toFixed(0)
+    return result
+  }
+
   renderScore = () => {
     const { questionsAnswered, questionsCorrect } = this.state
-    const percentage = 80
-    // calculate percentage
+    const percentage = this.calculateScore()
     return (
       <View style={styles.container}>
         <View style={styles.titleContainer}>
@@ -163,18 +174,16 @@ class Quiz extends Component {
     })
   }
 
-  render() { 
+  render() {
     const { finished, questionsAnswered, questionsCorrect, questionsToAnswer, currentQuestion } = this.state
-    
+
     if (currentQuestion === {}) {
       return null
     }
 
-    if (questionsToAnswer === []) {
+    if (questionsToAnswer.length === 0) {
       return this.renderScore()
     }
-
-    
 
     return (
       <View style={styles.container}>
