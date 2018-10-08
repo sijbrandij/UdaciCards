@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { createStackNavigator } from 'react-navigation'
 import { FontAwesome } from '@expo/vector-icons'
 import { red, orange, green, white, purple } from '../utils/colors'
+import { clearLocalNotification, setLocalNotification } from '../utils/helpers'
 
 class Quiz extends Component {
   state = {
@@ -38,21 +39,35 @@ class Quiz extends Component {
   }
 
   saveCorrectAnswer = () => {
+    const nextQuestion = this.nextQuestion()
+
+    if (nextQuestion === null) {
+      clearLocalNotification()
+        .then(setLocalNotification)
+    }
+
     this.setState(prevState => ({
       questionsAnswered: prevState.questionsAnswered + 1,
       questionsCorrect: prevState.questionsCorrect + 1,
       questionsToAnswer: prevState.questionsToAnswer.filter(element => element !== prevState.currentQuestion),
       showAnswer: false,
-      currentQuestion: this.nextQuestion(),
+      currentQuestion: nextQuestion,
     }))
   }
 
   saveIncorrectAnswer = () => {
+    const nextQuestion = this.nextQuestion()
+
+    if (nextQuestion === null) {
+      clearLocalNotification()
+        .then(setLocalNotification)
+    }
+
     this.setState(prevState => ({
       questionsAnswered: prevState.questionsAnswered + 1,
       questionsToAnswer: prevState.questionsToAnswer.filter(element => element !== prevState.currentQuestion),
       showAnswer: false,
-      currentQuestion: this.nextQuestion()
+      currentQuestion: nextQuestion
     }))
   }
 
@@ -95,12 +110,12 @@ class Quiz extends Component {
         <TouchableOpacity
         style={styles.ctaBtn}
           onPress={this.reset}>
-          <Text style={styles.ctaBtnText}>Reset quiz</Text>
+          <Text style={styles.ctaBtnText}>Start Over</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.secondaryBtn}
           onPress={this.toDeck}>
-          <Text style={styles.secondaryBtnText}>Back</Text>
+          <Text style={styles.secondaryBtnText}>Back to Deck</Text>
         </TouchableOpacity>
       </View>
     )
