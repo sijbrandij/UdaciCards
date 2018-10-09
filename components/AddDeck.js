@@ -13,7 +13,7 @@ import { parameterizeString, FLASHCARDS_STORAGE_KEY } from '../utils/helpers'
 import { submitDeck } from '../utils/api'
 import { connect } from 'react-redux'
 import { addDeck } from '../actions'
-import { white, purple } from '../utils/colors'
+import { white, purple, gray } from '../utils/colors'
 import { NavigationActions } from 'react-navigation'
 
 class AddDeck extends Component {
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     height: 44,
     padding: 8,
     borderWidth: 1,
-    borderColor: '#757575',
+    borderColor: gray,
     borderRadius: 5,
     margin: 50,
   },
