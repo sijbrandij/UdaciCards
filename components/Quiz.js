@@ -138,7 +138,7 @@ class Quiz extends Component {
     if (showAnswer === true) {
       return (
         <View style={styles.titleContainer}>
-          <Text>{currentQuestion.answer}</Text>
+          <Text style={styles.title}>{currentQuestion.answer}</Text>
         </View>
       )
     }

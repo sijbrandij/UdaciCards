@@ -47,7 +47,7 @@ class AddQuestion extends Component {
 		const { question, answer } = this.state
 		return (
 			<KeyboardAvoidingView style={styles.container}>
-        <Text style={styles.title}>Add Question</Text>
+        <Text style={styles.title}>Add Card</Text>
         <TextInput
           style={styles.input}
           value={question}

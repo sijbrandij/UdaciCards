@@ -21,7 +21,7 @@ class DeckDetail extends Component {
 			  </View>
 		    <TouchableOpacity
 		    	onPress={() => this.props.navigation.navigate(
-		    		'Start a Quiz',
+		    		'Quiz',
 		    		{ deckId: navigation.state.params.deckId, title: deck.title }
 		    	)}
 		    	disabled={numberOfQuestions === 0}
